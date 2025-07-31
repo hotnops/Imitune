@@ -29,10 +29,12 @@ def main():
     parser.add_argument("--device-name",
                         type=str,
                         help="The name of the device. This can be anything, \
-                            and will be used for NodeCache generation")
+                            and will be used for NodeCache generation",
+                        required=True)
     parser.add_argument("--pfx-file-path",
                         type=str,
-                        help="The path to the MDM certificate of the device.")
+                        help="The path to the MDM certificate of the device.",
+                        required=True)
     parser.add_argument("--pfx-password",
                         type=str,
                         help="The password used to encrypt the pfx file")

@@ -1,0 +1,28 @@
+[project]
+name = "imitune"
+version = "0.1.0"
+description = "An OMA DM client impersonation tool"
+readme = "README.md"
+license = { text = "GPL3" }
+authors = [{ name = "hotnops", email = "hotnops@protonmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "asn1crypto==1.5.1",
+    "certifi==2025.7.14",
+    "cffi==1.17.1",
+    "charset-normalizer==3.4.2",
+    "cryptography==45.0.5",
+    "idna==3.10",
+    "lxml==6.0.0",
+    "pycparser==2.22",
+    "requests==2.32.4",
+    "urllib3==2.5.0",
+    "xmltodict==0.14.2"
+]
+
+[project.scripts]
+imitune = "imitune.main:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
