@@ -22,7 +22,7 @@ def main():
 ██║██║╚██╔╝██║██║   ██║   ██║   ██║██║╚██╗██║██╔══╝  
 ██║██║ ╚═╝ ██║██║   ██║   ╚██████╔╝██║ ╚████║███████╗
 ╚═╝╚═╝     ╚═╝╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-              [ I M I T U N E ]                      
+              [ I M I T U N E ]
     """
     print(BANNER)
     parser = argparse.ArgumentParser(description="Getchu one")
@@ -36,32 +36,32 @@ def main():
     parser.add_argument("--pfx-password",
                         type=str,
                         help="The password used to encrypt the pfx file")
-    parser.add_argument("--node-cache-path",
-                        type=str,
-                        help="Path to the node cache json. \
-                            Overrides the default inferred from device name",
-                        required=False)
-    parser.add_argument("--action", choices=["init", "checkin"], required=True)
     parser.add_argument("--dummy-path",
                         required=False,
                         help="Path to a directory containing existing \
                             SyncML files for testing")
     parser.add_argument("--user-prompt", action='store_true', default=False)
     parser.add_argument("--output-directory", default=None, required=False)
+    parser.add_argument("--user-jwt", default="", help="A base 64 encoded \
+                        JWT for Intune to obtain user targeted setting")
 
     args = parser.parse_args()
+
+    if not args.output_directory:
+        args.output_directory = args.device_name
 
     try:
         client = oma_dm_client.OMADMClient(
             args.device_name,
             args.pfx_file_path,
             args.pfx_password,
-            args.node_cache_path,
+            args.output_directory,
             args.dummy_path,
-            args.user_prompt)
+            args.user_prompt,
+            args.user_jwt)
 
     except ValueError:
         print("[!] failed to initialize client")
         sys.exit()
-    if args.action == "init" and client:
+    if client:
         client.intuneInit()

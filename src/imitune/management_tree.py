@@ -13,21 +13,12 @@ class ManagementTree:
     Acts as a dummy representation of a management tree
     """
 
-    def __init__(self, node_cache_path: str, user_prompt: bool):
+    def __init__(self, user_prompt: bool):
         self._data = {}
         self.user_prompt = user_prompt
-        with open(node_cache_path, 'r', encoding="utf-8") as f:
-            text = f.read()
-            json_data = json.loads(text)
 
-            # Keep the structure of node_ids
-            self._data['node_ids'] = json_data['node_ids']
-            self._data['uris'] = {}
-
-            # Only grab the value from the reg structure
-            for key, value in json_data['uris'].items():
-                self._data['uris'][key] = value.get(
-                    "ExpectedValue", {}).get("data")
+        self._data['node_ids'] = {}
+        self._data['uris'] = {}
 
         if os.path.exists("managementTree.json"):
             print("[*] loading existing data from managementTree.json")
@@ -76,7 +67,7 @@ class ManagementTree:
             # We don't want a 404, we want 0 based on observed
             # conversations
             if key.startswith(CERT_STRING):
-                print(f"[*] got q reuest for {key}. sending 0")
+                print(f"[*] got a request for {key}. sending 0")
                 return 0
             if self.user_prompt:
                 value = input(
@@ -97,3 +88,9 @@ class ManagementTree:
         Removes a value from the management tree
         """
         self._data["uris"].pop(key)
+
+    def keys(self):
+        return self._data["uris"].keys()
+
+    def items(self):
+        return self._data["uris"].items()

@@ -2,6 +2,7 @@
 Manage an OMA DM Session
 """
 from .omadm_message import MessageType, OMADMMessage
+from .oma_dm_commands import OMAAlertCommand
 
 
 class OMADMSession:
@@ -35,9 +36,21 @@ class OMADMSession:
         response = OMADMMessage.from_xml(responseXml)
         self.addMessage(response.message_id, response, MessageType.RESPONSE)
 
-    def buildRequestMessage(self) -> OMADMMessage:
+    def buildRequestMessage(self, user_jwt="") -> OMADMMessage:
         oldMessageId = self.message_id
         self.message_id += 1
+        if user_jwt:
+            self.commands.append(OMAAlertCommand(
+                    {'Data': '1224',
+                     'Item': {
+                         'Meta': {
+                             'Type': {
+                                 '@xmlns': 'syncml:metinf',
+                                 '#text': 'com.microsoft/MDM/AADUserToken'
+                                 }
+                                 },
+                         'Data': user_jwt
+                        }}))
         newMessage = OMADMMessage(self.commands, self.message_id)
         # We need to populate the sync header status if it's not the initial
         prevMsg = self.messages.get(oldMessageId, {}).get(MessageType.RESPONSE)
