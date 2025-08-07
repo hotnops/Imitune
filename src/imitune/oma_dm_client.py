@@ -123,10 +123,15 @@ class OMADMClient:
                  should_user_prompt: bool = False,
                  user_jwt: str = ""):
         self.deviceName = device_name
-        self.managementTree = ManagementTree(should_user_prompt)
-        self.user_jwt = user_jwt
         self.output_directory = os.path.join(os.getcwd(), output_directory)
         os.makedirs(self.output_directory, exist_ok=True)
+        trace_path = os.path.join(self.output_directory, "traces")
+
+        os.makedirs(trace_path, exist_ok=True)
+
+        self.managementTree = ManagementTree(device_name,
+                                             should_user_prompt)
+        self.user_jwt = user_jwt
         self.sessions = {}
         self.current_session = None
         self.mtls_session = create_mtls_session(pfx_file_path, pfx_password)
@@ -136,10 +141,6 @@ class OMADMClient:
             raise ValueError("mtls session not established")
         self.dummy_path = dummy_data_path
         self.user_prompt = should_user_prompt
-
-        trace_path = os.path.join(self.output_directory, "traces")
-
-        os.makedirs(trace_path, exist_ok=True)
 
     def newSession(self):
         sessionId = random.randint(50000, 100000)
@@ -256,7 +257,11 @@ class OMADMClient:
             self.sendRequest()
 
         self.extract_credentials()
-        with open("managementTree.json", 'w', encoding="utf-8") as f:
+        management_tree_path = os.path.join(
+            os.getcwd(),
+            self.deviceName,
+            "managementTree.json")
+        with open(management_tree_path, 'w', encoding="utf-8") as f:
             f.write(json.dumps(self.managementTree._data["uris"]))
 
     def executeCommands(self):

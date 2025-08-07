@@ -4,6 +4,26 @@ An OMA-DM client and set of helper tools to impersonate an MDM managed device
 ## Background
 This tool works best when you already have a working knowledge of the environment and can provide as much detail about the environment as possible
 
+## Installation
+You can install via pip. I suggest using virutal environments
+```
+mkdir imitune-ops
+cd imitune-ops
+python -m venv venv
+```
+On windows
+```
+venv\scripts\activate.bat
+```
+On Linix
+```
+source venv/bin/activate
+```
+Then, install imitune
+```
+pip install imitune
+```
+
 ## Usage
 1. Obtain an MDM certificate for an Intune management device
 See our blog post here on how to accomplish this step:

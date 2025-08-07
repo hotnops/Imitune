@@ -1,8 +1,11 @@
 """
 A helper class for maintaining the management tree
 """
+import importlib.resources
 import json
 import os
+import shutil
+
 from datetime import datetime, timezone, timedelta
 
 CERT_STRING = "./Device/Vendor/MSFT/ClientCertificateInstall/PFXCertInstall"
@@ -13,21 +16,39 @@ class ManagementTree:
     Acts as a dummy representation of a management tree
     """
 
-    def __init__(self, user_prompt: bool):
+    def __init__(self, device_name: str, user_prompt: bool):
         self._data = {}
         self.user_prompt = user_prompt
 
         self._data['node_ids'] = {}
         self._data['uris'] = {}
 
-        if os.path.exists("managementTree.json"):
-            print("[*] loading existing data from managementTree.json")
-            with open('managementTree.json', 'r', encoding="utf-8") as f:
-                text = f.read()
-                json_data = json.loads(text)
+        management_tree_path = os.path.join(
+            os.getcwd(),
+            device_name,
+            "managementTree.json")
 
-                for key, value in json_data.items():
-                    self._data["uris"][key] = value
+        if not os.path.exists(management_tree_path):
+            print("[*] management tree no found. copying from template")
+            template_path = importlib.resources.files(
+                'imitune.data').joinpath(
+                    'managementTree.json.template')
+
+            with importlib.resources.as_file(template_path) as path:
+                shutil.copyfile(path, management_tree_path)
+
+            print(f"[!] template file copied to {management_tree_path}. \
+ populate it with values and re-run")
+
+            raise ValueError("template copied but not initialized")
+
+        print(f"[*] loading existing data from {management_tree_path}")
+        with open(management_tree_path, 'r', encoding="utf-8") as f:
+            text = f.read()
+            json_data = json.loads(text)
+
+            for key, value in json_data.items():
+                self._data["uris"][key] = value
 
         self._data["uris"]["./Vendor/MSFT/NodeCache/MS%20DM%20Server"] = \
             "CacheVersion/Nodes/ChangedNodes/ChangedNodesData"
