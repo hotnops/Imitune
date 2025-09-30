@@ -6,7 +6,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/hotnops/Imitune)](https://github.com/hotnops/Imitune)
 [![GitHub Stars](https://img.shields.io/github/stars/hotnops/Imitune?style=social)](https://github.com/hotnops/Imitune)
 
-An OMA-DM client and set of helper tools to impersonate an MDM managed device for security research and penetration testing.
+An OMA-DM client and set of helper tools to impersonate an MDM managed device.
 
 ## 📋 Table of Contents
 
@@ -25,7 +25,7 @@ An OMA-DM client and set of helper tools to impersonate an MDM managed device fo
 
 ## Overview
 
-Imitune enables security researchers and penetration testers to simulate MDM (Mobile Device Management) enrolled devices by implementing an OMA-DM client that can communicate with Microsoft Intune. This tool is particularly useful for testing MDM security configurations and understanding device management workflows.
+Imitune provides the capability to simulate MDM (Mobile Device Management) enrolled devices by implementing an OMA-DM client that can communicate with Microsoft Intune.
 
 > **⚠️ Important**: This tool works best when you already have a working knowledge of the environment and can provide as much detail about the target environment as possible.
 
